@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>The Imitators</title>
+<link rel="stylesheet" href="styles.css">
+<style type="text/css"></style>
+	<script>
+		var album = [];
+
+		function loadFile() {
+			request = new XMLHttpRequest();
+			console.log("request created");
+
+			request.open("GET", "https://thenrytufts.github.io/SetListJSON/album.json", true);
+			
+			console.log("open req file");
+
+			request.onreadystatechange = function() {
+				console.log("onreadystatechange");
+
+				if (request.readyState == 4 && request.status == 200) {
+					console.log("ALL READY");
+					result = request.responseText;
+					album = JSON.parse(result);
+					setAlbumHTML(album);
+					setGenreSelect();
+					document.getElementById("jsonData").innerHTML = "<p>" + result + "</p>";
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+					console.log("something is wrong");
+				}
+				else if (request.readyState == 3) {
+					console.log("too soon");
+				}
+			}
+
+			request.send();
+			console.log("request sent");
+		}
+
+		function filterSongs() {
+			genreValue = document.getElementById("genre").value;
+			filteredAlbum = [];
+			if (genreValue == "All") {
+				filteredAlbum = album;
+			}
+			else {
+				album.forEach(function(song) {
+					song.genre.forEach(function(genre) {
+						if (genre == genreValue) {
+							filteredAlbum.push(song);
+						}
+					}) 
+				})
+			}	
+			setAlbumHTML(filteredAlbum);
+		}
+
+		function setAlbumHTML(new_album) {
+			albumHTML = "<ul>";
+			new_album.forEach(function(song) {
+				albumHTML += "<p>" + song.artist + " • " + song.title + " • ";
+				song.genre.forEach(function(genre) {
+					albumHTML += genre + "/";
+				})
+				albumHTML = albumHTML.substring(0, albumHTML.length - 1);
+				albumHTML += " • " + song.year + "</p>";
+			})
+			albumHTML += "</ul>";
+			document.getElementById("set").innerHTML = albumHTML;
+		} 
+
+		function setGenreSelect() {
+			genreList = [];
+			genreHTML = "<option value='All'>All Genres</option>";
+			album.forEach(function(song) {
+				song.genre.forEach(function(genre) {
+					if (!genreList.includes(genre)) {
+						genreList.push(genre);
+						genreHTML += "<option value=" + genre + ">" + genre + "</option>";
+					}
+				})
+			})
+			genreSelect = document.getElementById("genre");
+			genreSelect.innerHTML = genreHTML;
+		}
+
+	</script>
+</head>
+<body onload="loadFile()">
+	<div id="jsonData" style="color: white; font-size: 14px;"></div> 
+	<div class="container">
+		<p class="name">The Imitators</p>
+		<p class="format">Artist • Song • Genre • Year</p>
+		<div id="set"></div>
+		<form>
+		<select id="genre">
+		</select>
+		<button type='button' onclick="filterSongs()">Filter</button>
+	</form>
+	</div>
+</body>
+</html>

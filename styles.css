@@ -1,0 +1,42 @@
+body {
+	background: url(cover1.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	color: white;
+}
+
+.name {
+	margin-top: 1%;
+	font-size: 40px;
+	font-style: georgia;
+}
+
+.format {
+	margin-top: -2%;
+	font-size: 20px;
+	font-style: georgia;
+}
+
+#set {
+	margin-top: -3%;
+	font-size: 22px;
+	display: flex;
+	flex-direction: column;
+}
+
+p {
+	letter-spacing: 4px;
+}
+
+select {
+	width: 100px;
+	height: 30px;
+}
